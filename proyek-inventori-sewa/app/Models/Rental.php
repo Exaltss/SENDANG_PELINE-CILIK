@@ -11,7 +11,7 @@ class Rental extends Model
      *
      * @var array
      */
-    protected $fillable = ['product_id', 'rent_date', 'quantity'];
+    protected $fillable = ['product_id', 'rent_date', 'quantity', 'renter_code'];
 
     /**
      * The attributes that should be cast to native types.

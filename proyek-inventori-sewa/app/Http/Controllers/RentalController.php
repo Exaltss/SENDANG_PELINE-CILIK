@@ -14,25 +14,31 @@ class RentalController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        // Validasi input dari form, termasuk renter_code yang baru
+        $validatedData = $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
-            'rent_date' => 'required|date_format:Y-m-d',
+            'renter_code' => 'required|string|max:255', // <-- VALIDASI BARU
+            'rent_date' => 'required|date_format:Y-m-d|unique:rentals,rent_date,NULL,id,product_id,' . $request->product_id,
+        ], [
+            // Pesan error kustom untuk tanggal yang sudah ada
+            'rent_date.unique' => 'Tanggal ini sudah disewa untuk produk ini.',
         ]);
 
         $product = Product::findOrFail($request->product_id);
 
+        // Cek apakah stok mencukupi
         if ($request->quantity > $product->stock) {
-            return back()->with('error', 'Stok tidak mencukupi untuk jumlah yang diminta.');
+            return back()->with('error', 'Stok tidak mencukupi untuk jumlah yang diminta.')->withInput();
         }
 
-        DB::transaction(function () use ($request, $product) {
-            $product->decrement('stock', $request->quantity);
-            Rental::create([
-                'product_id' => $request->product_id,
-                'quantity' => $request->quantity,
-                'rent_date' => $request->rent_date,
-            ]);
+        // Gunakan transaksi database untuk memastikan konsistensi data
+        DB::transaction(function () use ($validatedData, $product) {
+            // Kurangi stok produk
+            $product->decrement('stock', $validatedData['quantity']);
+
+            // Buat entri penyewaan baru dengan data yang sudah divalidasi
+            Rental::create($validatedData);
         });
 
         return redirect()->route('products.show', $product)->with('success', 'Penyewaan berhasil dicatat!');
@@ -49,7 +55,7 @@ class RentalController extends Controller
         $endDate = $request->input('end_date');
 
         // Mulai query dengan eager loading relasi produk
-        $query = \App\Models\Rental::with('product');
+        $query = Rental::with('product');
 
         // Terapkan filter pencarian nama produk jika ada
         if ($search) {

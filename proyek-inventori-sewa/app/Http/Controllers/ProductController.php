@@ -63,13 +63,29 @@ class ProductController extends Controller
      * Menampilkan detail satu produk.
      */
     public function show(Product $product)
-    {
-        $bookedDates = $product->rentals()->pluck('rent_date')->map(function ($date) {
-            return $date->format('Y-m-d');
-        })->toArray();
+{
+    // Eager load relasi rentals untuk efisiensi query
+    $product->load('rentals');
 
-        return view('products.show', compact('product', 'bookedDates'));
-    }
+    // Siapkan array tanggal yang sudah dibooking untuk menonaktifkan di kalender
+    $bookedDates = $product->rentals->pluck('rent_date')->map(function ($date) {
+        return $date->format('Y-m-d');
+    })->toArray();
+
+    // Buat objek/kamus yang memetakan tanggal ke detail penyewaan
+    $rentalDetailsByDate = $product->rentals->keyBy(function ($rental) {
+        return $rental->rent_date->format('Y-m-d');
+    })->map(function ($rental) {
+        return [
+            'renter_code' => $rental->renter_code,
+            'quantity' => $rental->quantity,
+            'rent_date' => $rental->rent_date->format('j F Y'), // Format tanggal yang lebih mudah dibaca
+        ];
+    });
+
+    // Kirim semua data yang diperlukan ke view
+    return view('products.show', compact('product', 'bookedDates', 'rentalDetailsByDate'));
+}
 
     /**
      * Menampilkan form untuk mengedit produk.
