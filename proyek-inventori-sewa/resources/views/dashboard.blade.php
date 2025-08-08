@@ -75,9 +75,13 @@
                     <div x-show="tab === 'premium'" class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
                         @forelse ($premiumProducts as $product)
                             <div class="overflow-hidden transition-all duration-300 transform border border-gray-800 rounded-lg group hover:shadow-2xl hover:shadow-yellow-500/20 hover:-translate-y-2" style="background-color: var(--bg-darker);">
-                                <img src="{{ Storage::url($product->image_path) }}" alt="{{ $product->name }}" class="object-cover w-full transition-transform duration-300 transform h-96 group-hover:scale-105">
+                                <a href="{{ route('products.show', $product) }}">
+                                    <img src="{{ Storage::url($product->image_path) }}" alt="{{ $product->name }}" class="object-cover w-full transition-transform duration-300 transform h-96 group-hover:scale-105">
+                                </a>
                                 <div class="p-5 text-center">
-                                    <h3 class="mb-2 text-xl font-bold transition text-light group-hover:text-gold-400">{{ $product->name }}</h3>
+                                    <a href="{{ route('products.show', $product) }}">
+                                        <h3 class="mb-2 text-xl font-bold transition text-light group-hover:text-gold-400">{{ $product->name }}</h3>
+                                    </a>
                                     <div class="flex justify-center space-x-4">
                                         <a href="{{ route('products.edit', $product) }}" class="text-sm font-medium text-yellow-400 transition hover:text-yellow-300">Edit</a>
                                         <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus produk ini?');">
@@ -97,9 +101,13 @@
                     <div x-show="tab === 'original'" class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4" style="display: none;">
                         @forelse ($originalProducts as $product)
                              <div class="overflow-hidden transition-all duration-300 transform border border-gray-800 rounded-lg group hover:shadow-2xl hover:shadow-yellow-500/20 hover:-translate-y-2" style="background-color: var(--bg-darker);">
-                                <img src="{{ Storage::url($product->image_path) }}" alt="{{ $product->name }}" class="object-cover w-full transition-transform duration-300 transform h-96 group-hover:scale-105">
+                                <a href="{{ route('products.show', $product) }}">
+                                    <img src="{{ Storage::url($product->image_path) }}" alt="{{ $product->name }}" class="object-cover w-full transition-transform duration-300 transform h-96 group-hover:scale-105">
+                                </a>
                                 <div class="p-5 text-center">
-                                    <h3 class="mb-2 text-xl font-bold transition text-light group-hover:text-gold-400">{{ $product->name }}</h3>
+                                    <a href="{{ route('products.show', $product) }}">
+                                        <h3 class="mb-2 text-xl font-bold transition text-light group-hover:text-gold-400">{{ $product->name }}</h3>
+                                    </a>
                                     <div class="flex justify-center space-x-4">
                                         <a href="{{ route('products.edit', $product) }}" class="text-sm font-medium text-yellow-400 transition hover:text-yellow-300">Edit</a>
                                         <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus produk ini?');">
@@ -119,9 +127,13 @@
                     <div x-show="tab === 'aksesoris'" class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4" style="display: none;">
                         @forelse ($accessoryProducts as $product)
                              <div class="overflow-hidden transition-all duration-300 transform border border-gray-800 rounded-lg group hover:shadow-2xl hover:shadow-yellow-500/20 hover:-translate-y-2" style="background-color: var(--bg-darker);">
-                                <img src="{{ Storage::url($product->image_path) }}" alt="{{ $product->name }}" class="object-cover w-full transition-transform duration-300 transform h-96 group-hover:scale-105">
+                                <a href="{{ route('products.show', $product) }}">
+                                    <img src="{{ Storage::url($product->image_path) }}" alt="{{ $product->name }}" class="object-cover w-full transition-transform duration-300 transform h-96 group-hover:scale-105">
+                                </a>
                                 <div class="p-5 text-center">
-                                    <h3 class="mb-2 text-xl font-bold transition text-light group-hover:text-gold-400">{{ $product->name }}</h3>
+                                    <a href="{{ route('products.show', $product) }}">
+                                        <h3 class="mb-2 text-xl font-bold transition text-light group-hover:text-gold-400">{{ $product->name }}</h3>
+                                    </a>
                                     <div class="flex justify-center space-x-4">
                                         <a href="{{ route('products.edit', $product) }}" class="text-sm font-medium text-yellow-400 transition hover:text-yellow-300">Edit</a>
                                         <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus produk ini?');">

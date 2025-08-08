@@ -43,7 +43,7 @@ class ProductController extends Controller
         'name' => 'required|string|max:255',
         'category' => 'required|string',
         'stock' => 'required|integer|min:0',
-        'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp',
     ]);
 
     // INI BARIS YANG DIPERBAIKI
@@ -88,7 +88,7 @@ class ProductController extends Controller
         'name' => 'required|string|max:255',
         'category' => 'required|string',
         'stock' => 'required|integer|min:0',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+       'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp',
     ]);
 
     $data = $request->only(['name', 'category', 'stock']);
