@@ -38,28 +38,26 @@ class ProductController extends Controller
      * Menyimpan produk baru ke database.
      */
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'category' => 'required|string',
-            'stock' => 'required|integer|min:0',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        ]);
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'category' => 'required|string',
+        'stock' => 'required|integer|min:0',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+    ]);
 
-        $path = $request->file('image')->store('public/products');
+    // INI BARIS YANG DIPERBAIKI
+    $path = $request->file('image')->store('products', 'public');
 
-        Product::create([
-            'name' => $request->name,
-            'category' => $request->category,
-            'stock' => $request->stock,
-            'image_path' => $path,
-        ]);
+    Product::create([
+        'name' => $request->name,
+        'category' => $request->category,
+        'stock' => $request->stock,
+        'image_path' => $path,
+    ]);
 
-        $categorySlug = strtolower(str_replace(' ', '-', $request->category));
-        $routeName = 'products.' . ($categorySlug === 'baju-premium' ? 'premium' : ($categorySlug === 'baju-original' ? 'original' : 'accessories'));
-
-        return redirect()->route($routeName)->with('success', 'Produk berhasil ditambahkan!');
-    }
+    return redirect()->route('dashboard')->with('success', 'Produk berhasil ditambahkan!');
+}
 
     /**
      * Menampilkan detail satu produk.
@@ -85,34 +83,31 @@ class ProductController extends Controller
      * Mengupdate produk di database.
      */
     public function update(Request $request, Product $product)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'category' => 'required|string',
-            'stock' => 'required|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        ]);
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'category' => 'required|string',
+        'stock' => 'required|integer|min:0',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+    ]);
 
-        $path = $product->image_path;
-        if ($request->hasFile('image')) {
-            if ($product->image_path) {
-                Storage::delete($product->image_path);
-            }
-            $path = $request->file('image')->store('public/products');
+    $data = $request->only(['name', 'category', 'stock']);
+
+    if ($request->hasFile('image')) {
+        // Hapus gambar lama jika ada
+        if ($product->image_path) {
+            Storage::disk('public')->delete($product->image_path);
         }
-
-        $product->update([
-            'name' => $request->name,
-            'category' => $request->category,
-            'stock' => $request->stock,
-            'image_path' => $path,
-        ]);
-
-        $categorySlug = strtolower(str_replace(' ', '-', $request->category));
-        $routeName = 'products.' . ($categorySlug === 'baju-premium' ? 'premium' : ($categorySlug === 'baju-original' ? 'original' : 'accessories'));
-
-        return redirect()->route($routeName)->with('success', 'Produk berhasil diperbarui!');
+        // Simpan gambar baru dan dapatkan path-nya
+        // INI BARIS YANG DIPERBAIKI
+        $path = $request->file('image')->store('products', 'public');
+        $data['image_path'] = $path;
     }
+
+    $product->update($data);
+
+    return redirect()->route('dashboard')->with('success', 'Produk berhasil diperbarui!');
+}
 
     /**
      * Menghapus produk dari database.
@@ -129,6 +124,6 @@ class ProductController extends Controller
         $categorySlug = strtolower(str_replace(' ', '-', $category));
         $routeName = 'products.' . ($categorySlug === 'baju-premium' ? 'premium' : ($categorySlug === 'baju-original' ? 'original' : 'accessories'));
 
-        return redirect()->route($routeName)->with('success', 'Produk berhasil dihapus!');
+        return redirect()->route('dashboard')->with('success', 'Produk berhasil dihapus!');
     }
 }

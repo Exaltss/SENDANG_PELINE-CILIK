@@ -1,48 +1,54 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="text-xl font-semibold leading-tight text-gray-200">
             Tambah Produk Baru
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
+            <div class="overflow-hidden bg-gray-800 shadow-sm sm:rounded-lg">
+                <div class="p-6 border-b border-gray-700">
+                    <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data" class="space-y-6">
                         @csrf
-                        <!-- Nama Produk -->
+
+                        {{-- Nama Produk --}}
                         <div>
-                            <x-input-label for="name" :value="__('Kode / Nama Produk')" />
-                            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
+                            <x-input-label for="name" value="Kode / Nama Produk" class="text-gray-300" />
+                            <x-text-input id="name" class="block w-full mt-1 text-gray-200 bg-gray-700 border-gray-600" type="text" name="name" :value="old('name')" required autofocus />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
-                        <!-- Kategori -->
-                        <div class="mt-4">
-                            <x-input-label for="category" :value="__('Kategori')" />
-                            <select name="category" id="category" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required>
+
+                        {{-- Kategori --}}
+                        <div>
+                            <x-input-label for="category" value="Kategori" class="text-gray-300" />
+                            <select name="category" id="category" class="block w-full mt-1 text-gray-200 bg-gray-700 border-gray-600 rounded-md shadow-sm focus:border-yellow-500 focus:ring-yellow-500" required>
                                 <option value="Baju Premium">Baju Premium</option>
                                 <option value="Baju Original">Baju Original</option>
                                 <option value="Aksesoris">Aksesoris</option>
                             </select>
                             <x-input-error :messages="$errors->get('category')" class="mt-2" />
                         </div>
-                        <!-- Stok -->
-                        <div class="mt-4">
-                            <x-input-label for="stock" :value="__('Stok')" />
-                            <x-text-input id="stock" class="block mt-1 w-full" type="number" name="stock" :value="old('stock')" required />
+
+                        {{-- Stok --}}
+                        <div>
+                            <x-input-label for="stock" value="Stok" class="text-gray-300" />
+                            <x-text-input id="stock" class="block w-full mt-1 text-gray-200 bg-gray-700 border-gray-600" type="number" name="stock" :value="old('stock')" required />
                             <x-input-error :messages="$errors->get('stock')" class="mt-2" />
                         </div>
-                        <!-- Gambar -->
-                        <div class="mt-4">
-                            <x-input-label for="image" :value="__('Gambar Produk')" />
-                            <input id="image" type="file" name="image" class="block mt-1 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" required>
+
+                        {{-- Gambar --}}
+                        <div>
+                            <x-input-label for="image" value="Gambar Produk" class="text-gray-300" />
+                            <input id="image" type="file" name="image" class="block w-full mt-1 text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-yellow-500 file:text-black hover:file:bg-yellow-400" required>
                             <x-input-error :messages="$errors->get('image')" class="mt-2" />
                         </div>
-                        <div class="flex items-center justify-end mt-6">
-                            <a href="{{ url()->previous() }}" class="text-sm text-gray-600 hover:text-gray-900 mr-4">Batal</a>
-                            <x-primary-button>
-                                {{ __('Simpan Produk') }}
+
+                        {{-- Tombol Aksi --}}
+                        <div class="flex items-center justify-end pt-4 space-x-4">
+                            <a href="{{ route('dashboard') }}" class="text-sm text-gray-400 hover:text-white">Batal</a>
+                            <x-primary-button class="text-black bg-yellow-500 hover:bg-yellow-600">
+                                Simpan Produk
                             </x-primary-button>
                         </div>
                     </form>
